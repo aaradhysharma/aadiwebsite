@@ -1,0 +1,226 @@
+@import "tailwindcss";
+
+/* ————————————————————————————————————————————————
+   Night Atlas design system
+   Deep-ink cartography, warm amber city lights.
+   ———————————————————————————————————————————————— */
+
+:root {
+  --bg: #06090f;
+  --bg-raised: #0b111d;
+  --bg-panel: #0d1524;
+  --line: rgba(233, 230, 220, 0.09);
+  --line-strong: rgba(233, 230, 220, 0.18);
+  --text: #e9e6dc;
+  --text-dim: #b9bfcf;
+  --muted: #8b94ab;
+  --amber: #f0b13c;
+  --amber-soft: rgba(240, 177, 60, 0.16);
+  --amber-glow: rgba(240, 177, 60, 0.45);
+  --ocean: #4fc3e8;
+  --ocean-deep: #071d33;
+  --sky: #8fb8de;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-bg-panel: var(--bg-panel);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--text);
+  --color-ink-dim: var(--text-dim);
+  --color-muted: var(--muted);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
+  --color-ocean: var(--ocean);
+  --color-sky: var(--sky);
+  --font-display: var(--font-fraunces), "Georgia", serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "Consolas", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--amber);
+  color: #171205;
+}
+
+/* Subtle film grain over everything — kills the flat "AI gradient" look */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 9s steps(6) infinite;
+}
+
+@keyframes grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-2%, 3%); }
+  40% { transform: translate(3%, -2%); }
+  60% { transform: translate(-3%, -3%); }
+  80% { transform: translate(2%, 2%); }
+}
+
+/* Section eyebrow label: 01 / JOURNEY style */
+.section-label {
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.section-label::after {
+  content: "";
+  height: 1px;
+  width: 64px;
+  background: var(--line-strong);
+  display: inline-block;
+}
+
+.section-label .idx {
+  color: var(--amber);
+}
+
+/* Hairline card */
+.hairline {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(233, 230, 220, 0.03), rgba(233, 230, 220, 0.005));
+}
+
+.hairline:hover {
+  border-color: var(--line-strong);
+}
+
+/* Mono coordinate tag, e.g. 25.7617° N — 80.1918° W */
+.coord {
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+/* Amber keyline underline for links */
+.link-keyline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-keyline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background: var(--amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-keyline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Underwater light rays — skewed translucent wedges (03 / OFF DUTY) */
+.ray {
+  background: linear-gradient(180deg, rgba(79, 195, 232, 0.11), transparent 75%);
+  filter: blur(7px);
+  animation-name: ray-sway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes ray-sway {
+  from {
+    transform: skewX(-17deg) translateX(-14px);
+    opacity: 0.45;
+  }
+  to {
+    transform: skewX(-8deg) translateX(16px);
+    opacity: 1;
+  }
+}
+
+/* Rising bubbles (03 / OFF DUTY) */
+.bubble {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(233, 230, 220, 0.55),
+    rgba(79, 195, 232, 0.12) 65%
+  );
+  animation-name: bubble-rise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.75;
+  }
+  85% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate(var(--drift, 0px), -105vh);
+    opacity: 0;
+  }
+}
+
+/* Scrollbar befitting the theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #1c2536;
+  border-radius: 5px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3650;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .grain::after {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
