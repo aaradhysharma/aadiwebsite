@@ -19,3 +19,5 @@ next-env.d.ts
 
 # private source material — resumes contain personal info, never commit
 /source-materials/
+
+.vercel
