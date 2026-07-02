@@ -19,7 +19,9 @@ export type Stop = {
   dates: string;
   kind: "education" | "work";
   buildingStyle: BuildingStyle;
-  /** Position of this stop's island on the 3D map plane [x, y, z] */
+  /** Real geographic position [latitude, longitude] in degrees — drives the globe */
+  latLon: [number, number];
+  /** Position of this stop's island on the 3D map plane [x, y, z] (legacy flat-map layout) */
   position: [number, number, number];
   /** One-line chapter title shown in the panel */
   chapter: string;
@@ -42,6 +44,7 @@ export const stops: Stop[] = [
     dates: "2016 – 2020",
     kind: "education",
     buildingStyle: "college",
+    latLon: [22.7196, 75.8577],
     position: [-12.5, 0, 3.5],
     chapter: "Where it starts",
     summary:
@@ -63,6 +66,7 @@ export const stops: Stop[] = [
     dates: "2020 – 2022",
     kind: "education",
     buildingStyle: "campus",
+    latLon: [42.3398, -71.0892],
     position: [-7.5, 0, -3.5],
     chapter: "The Northeastern years",
     summary:
@@ -86,6 +90,7 @@ export const stops: Stop[] = [
     dates: "Jun 2021 – Jan 2022",
     kind: "work",
     buildingStyle: "lab",
+    latLon: [42.3736, -71.1097],
     position: [-2.5, 0, 3],
     chapter: "First pharma lab",
     summary:
@@ -108,6 +113,7 @@ export const stops: Stop[] = [
     dates: "Sep 2022 – Apr 2024",
     kind: "work",
     buildingStyle: "office",
+    latLon: [35.7915, -78.7811],
     position: [2.5, 0, -3.5],
     chapter: "Scientific cloud at scale",
     summary:
@@ -131,6 +137,7 @@ export const stops: Stop[] = [
     dates: "Apr 2024 – Sep 2025",
     kind: "work",
     buildingStyle: "skyline",
+    latLon: [41.8781, -87.6298],
     position: [7.5, 0, 3],
     chapter: "Senior years, bigger clients",
     summary:
@@ -159,6 +166,7 @@ export const stops: Stop[] = [
     dates: "Dec 2025 – present",
     kind: "work",
     buildingStyle: "chenmed",
+    latLon: [25.7617, -80.1918],
     position: [12.5, 0, -3],
     chapter: "Building 3 → Building 1",
     summary:

@@ -1,67 +1,74 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Stars, Grid } from "@react-three/drei";
+import { Stars } from "@react-three/drei";
 import { stops } from "@/data/journey";
-import StopIsland from "./Building";
-import Route from "./Route";
-import CameraRig from "./CameraRig";
+import Globe from "./Globe";
+import CityScene from "./CityScene";
+
+export type JourneyView = "globe" | "city";
 
 type SceneProps = {
+  view: JourneyView;
+  /** Stop currently open at street level (city view) */
   selectedId: string | null;
-  onSelect: (id: string | null) => void;
+  /** Stop the globe is diving toward (globe view) */
+  focusId: string | null;
+  /** Stop we just left at street level — globe mounts hovering above it */
+  originId: string | null;
+  onSelect: (id: string) => void;
+  onAlmostArrived: (id: string) => void;
+  onArrived: (id: string) => void;
   reducedMotion: boolean;
+  interactive: boolean;
 };
 
-export default function Scene({ selectedId, onSelect, reducedMotion }: SceneProps) {
+export default function Scene({
+  view,
+  selectedId,
+  focusId,
+  originId,
+  onSelect,
+  onAlmostArrived,
+  onArrived,
+  reducedMotion,
+  interactive,
+}: SceneProps) {
+  const selected = stops.find((s) => s.id === selectedId) ?? null;
+
   return (
     <Canvas
-      camera={{ position: [0, 14.5, 23], fov: 42, near: 0.5, far: 140 }}
+      camera={{ position: [0, 0.5, 3.05], fov: 42, near: 0.05, far: 160 }}
       dpr={[1, 1.75]}
       gl={{ antialias: true, powerPreference: "high-performance" }}
-      onPointerMissed={() => onSelect(null)}
+      style={{ touchAction: "pan-y" }}
     >
       <color attach="background" args={["#06090f"]} />
-      <fog attach="fog" args={["#06090f", 36, 85]} />
 
-      {/* night lighting — cool moonlight + faint warm bounce */}
-      <ambientLight intensity={0.35} color="#8fb8de" />
-      <directionalLight position={[-14, 22, 10]} intensity={1.3} color="#b9cdea" />
-      <directionalLight position={[18, 8, -14]} intensity={0.4} color="#f0b13c" />
-
-      <Stars radius={90} depth={35} count={1400} factor={2.6} saturation={0} fade speed={0.5} />
-
-      {/* sea floor + cartographic grid */}
-      <mesh position={[0, -0.68, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[90, 48]} />
-        <meshStandardMaterial color="#05070c" roughness={1} metalness={0} />
-      </mesh>
-      <Grid
-        position={[0, -0.63, 0]}
-        infiniteGrid
-        cellSize={2.2}
-        sectionSize={11}
-        cellThickness={0.4}
-        sectionThickness={0.8}
-        cellColor="#131c2c"
-        sectionColor="#1a2438"
-        fadeDistance={75}
-        fadeStrength={2.4}
-      />
-
-      <Route reducedMotion={reducedMotion} />
-
-      {stops.map((stop) => (
-        <StopIsland
-          key={stop.id}
-          stop={stop}
-          selected={selectedId === stop.id}
-          dimmed={selectedId !== null && selectedId !== stop.id}
-          onSelect={(id) => onSelect(id)}
-        />
-      ))}
-
-      <CameraRig selectedId={selectedId} reducedMotion={reducedMotion} />
+      {view === "globe" ? (
+        <>
+          {/* soft space light for the sphere */}
+          <ambientLight intensity={0.72} color="#8fb8de" />
+          <directionalLight position={[4, 2, 6]} intensity={1.25} color="#b9cdea" />
+          <Stars radius={55} depth={25} count={1600} factor={2.2} saturation={0} fade speed={0.35} />
+          <Globe
+            focusId={focusId}
+            originId={originId}
+            onSelect={onSelect}
+            onAlmostArrived={onAlmostArrived}
+            onArrived={onArrived}
+            reducedMotion={reducedMotion}
+            interactive={interactive}
+          />
+        </>
+      ) : (
+        selected && (
+          <>
+            <fog attach="fog" args={["#06090f", 30, 70]} />
+            <CityScene stop={selected} reducedMotion={reducedMotion} />
+          </>
+        )
+      )}
     </Canvas>
   );
 }
