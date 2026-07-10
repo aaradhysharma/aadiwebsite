@@ -98,6 +98,60 @@ const atmosphereFragment = /* glsl */ `
 
 /* ———————————————————————— city marker ———————————————————————— */
 
+/** Tiny building silhouettes standing on the globe — one kit per stop style.
+    Local frame: x/y on the ground, +z points away from the earth's core.
+    p = [x, y] footprint offset · s = [width, depth, height] */
+const MINI_KITS: Record<Stop["buildingStyle"], Array<{ p: [number, number]; s: [number, number, number] }>> = {
+  college: [
+    { p: [0, 0], s: [1.2, 0.8, 0.9] },
+    { p: [-0.95, 0], s: [0.7, 0.6, 0.5] },
+    { p: [0.95, 0], s: [0.7, 0.6, 0.5] },
+  ],
+  campus: [
+    { p: [-0.5, -0.3], s: [0.42, 0.42, 1.9] },
+    { p: [0.45, 0], s: [1.0, 0.7, 0.7] },
+    { p: [-0.3, 0.7], s: [0.8, 0.5, 0.45] },
+  ],
+  lab: [
+    { p: [-0.35, 0], s: [1.4, 0.8, 0.7] },
+    { p: [0.7, -0.1], s: [0.6, 0.6, 1.5] },
+  ],
+  office: [
+    { p: [0, 0], s: [0.9, 0.8, 1.5] },
+    { p: [-0.85, 0.2], s: [0.7, 0.6, 0.6] },
+  ],
+  skyline: [
+    { p: [0.2, 0], s: [0.6, 0.6, 2.6] },
+    { p: [-0.65, -0.2], s: [0.5, 0.5, 1.7] },
+    { p: [0.9, 0.5], s: [0.4, 0.4, 1.1] },
+  ],
+  chenmed: [
+    { p: [0.8, -0.2], s: [0.7, 0.6, 1.6] },
+    { p: [-0.7, 0.3], s: [0.6, 0.6, 0.8] },
+    { p: [0, -0.8], s: [0.55, 0.5, 0.9] },
+  ],
+};
+
+const MINI_SCALE = 0.019;
+
+function MiniBuilding({ style, hovered }: { style: Stop["buildingStyle"]; hovered: boolean }) {
+  return (
+    <group scale={MINI_SCALE}>
+      {MINI_KITS[style].map(({ p, s }, i) => (
+        <mesh key={i} position={[p[0], p[1], s[2] / 2]}>
+          <boxGeometry args={[s[0], s[1], s[2]]} />
+          <meshStandardMaterial
+            color="#3a2c12"
+            emissive={hovered ? "#ffd98a" : AMBER}
+            emissiveIntensity={hovered ? 1.5 : 0.8}
+            roughness={0.6}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 type MarkerProps = {
   stop: Stop;
   onSelect: (id: string) => void;
@@ -158,10 +212,12 @@ function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps)
 
   return (
     <group ref={groupRef} position={position} quaternion={outward}>
-      {/* the light itself */}
+      {/* tiny lit building cluster standing on the earth */}
+      <MiniBuilding style={stop.buildingStyle} hovered={hovered} />
+      {/* glow at the buildings' feet — the city light itself */}
       <mesh>
-        <sphereGeometry args={[0.0135, 12, 12]} />
-        <meshBasicMaterial color={hovered ? "#ffd98a" : AMBER} />
+        <sphereGeometry args={[0.0085, 10, 10]} />
+        <meshBasicMaterial color={hovered ? "#ffd98a" : AMBER} transparent opacity={0.85} />
       </mesh>
       {/* sonar pulse */}
       <mesh ref={ringRef}>
