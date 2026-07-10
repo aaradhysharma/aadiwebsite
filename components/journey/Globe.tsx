@@ -134,16 +134,24 @@ const MINI_KITS: Record<Stop["buildingStyle"], Array<{ p: [number, number]; s: [
 
 const MINI_SCALE = 0.019;
 
-function MiniBuilding({ style, hovered }: { style: Stop["buildingStyle"]; hovered: boolean }) {
+function MiniBuilding({
+  style,
+  accent,
+  hovered,
+}: {
+  style: Stop["buildingStyle"];
+  accent: string;
+  hovered: boolean;
+}) {
   return (
     <group scale={MINI_SCALE}>
       {MINI_KITS[style].map(({ p, s }, i) => (
         <mesh key={i} position={[p[0], p[1], s[2] / 2]}>
           <boxGeometry args={[s[0], s[1], s[2]]} />
           <meshStandardMaterial
-            color="#3a2c12"
-            emissive={hovered ? "#ffd98a" : AMBER}
-            emissiveIntensity={hovered ? 1.5 : 0.8}
+            color="#1a1712"
+            emissive={accent}
+            emissiveIntensity={hovered ? 1.65 : 1.0}
             roughness={0.6}
           />
         </mesh>
@@ -210,19 +218,21 @@ function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps)
     }
   });
 
+  const accent = stop.accent;
+
   return (
     <group ref={groupRef} position={position} quaternion={outward}>
-      {/* tiny lit building cluster standing on the earth */}
-      <MiniBuilding style={stop.buildingStyle} hovered={hovered} />
+      {/* tiny lit building cluster standing on the earth — colored to its employer */}
+      <MiniBuilding style={stop.buildingStyle} accent={accent} hovered={hovered} />
       {/* glow at the buildings' feet — the city light itself */}
       <mesh>
         <sphereGeometry args={[0.0085, 10, 10]} />
-        <meshBasicMaterial color={hovered ? "#ffd98a" : AMBER} transparent opacity={0.85} />
+        <meshBasicMaterial color={accent} transparent opacity={0.85} />
       </mesh>
       {/* sonar pulse */}
       <mesh ref={ringRef}>
         <ringGeometry args={[0.02, 0.024, 32]} />
-        <meshBasicMaterial color={AMBER} transparent opacity={0} side={THREE.DoubleSide} />
+        <meshBasicMaterial color={accent} transparent opacity={0} side={THREE.DoubleSide} />
       </mesh>
       {/* generous invisible hit target */}
       <mesh
@@ -248,7 +258,7 @@ function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps)
             fontSize: "9.5px",
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            color: hovered ? "#f0b13c" : "#b9bfcf",
+            color: hovered ? accent : "#b9bfcf",
             whiteSpace: "nowrap",
             textShadow: "0 1px 8px rgba(6,9,15,0.9)",
             transition: "color 0.25s ease",

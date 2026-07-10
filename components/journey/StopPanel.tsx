@@ -29,6 +29,12 @@ export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps)
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 16 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          style={
+            {
+              "--accent": stop.accent,
+              "--accent-soft": stop.accentSoft,
+            } as React.CSSProperties
+          }
           className="pointer-events-none flex max-h-full w-full flex-col gap-2 md:w-[26rem]"
         >
           {/* header card — tap anywhere on it to expand/collapse on phones */}
@@ -37,7 +43,7 @@ export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps)
             className="pointer-events-auto flex cursor-pointer items-start justify-between gap-4 border border-line bg-bg-panel/60 px-5 pb-3.5 pt-4 backdrop-blur-[3px] md:cursor-default md:px-6 md:pb-4 md:pt-5"
           >
             <div className="min-w-0">
-              <p className="font-mono text-[0.6rem] uppercase tracking-[0.24em] text-amber">
+              <p className="font-mono text-[0.6rem] uppercase tracking-[0.24em] text-[var(--accent)]">
                 {String(stop.index).padStart(2, "0")} / {stop.city.toUpperCase()} —{" "}
                 {stop.region.toUpperCase()}
               </p>
@@ -53,7 +59,7 @@ export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps)
                   setExpanded((v) => !v);
                 }}
                 aria-expanded={expanded}
-                className="border border-line px-2.5 py-1.5 font-mono text-[0.58rem] uppercase tracking-[0.18em] text-ink-dim transition-colors hover:border-amber/50 hover:text-amber md:hidden"
+                className="border border-line px-2.5 py-1.5 font-mono text-[0.58rem] uppercase tracking-[0.18em] text-ink-dim transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)] md:hidden"
               >
                 {expanded ? "HIDE ▾" : "DETAILS ▴"}
               </button>
@@ -95,7 +101,7 @@ export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps)
                 <ul className="space-y-2.5">
                   {stop.highlights.map((h) => (
                     <li key={h} className="flex gap-3 text-[0.82rem] leading-relaxed text-muted">
-                      <span aria-hidden className="mt-0.5 select-none text-amber">
+                      <span aria-hidden className="mt-0.5 select-none text-[var(--accent)]">
                         —
                       </span>
                       <span>{h}</span>
@@ -134,10 +140,10 @@ export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps)
                           href={project.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group border border-line px-3 py-1.5 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-ink-dim transition-colors hover:border-amber/50 hover:bg-amber-soft hover:text-ink"
+                          className="group border border-line px-3 py-1.5 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-ink-dim transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-ink"
                         >
                           {project.name}{" "}
-                          <span className="text-muted transition-colors group-hover:text-amber">↗</span>
+                          <span className="text-muted transition-colors group-hover:text-[var(--accent)]">↗</span>
                         </a>
                       );
                     })}
@@ -162,7 +168,7 @@ export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps)
             {stop.index < stops.length ? (
               <button
                 onClick={() => onNavigate(stops[stop.index].id)}
-                className="link-keyline font-mono text-[0.62rem] uppercase tracking-[0.18em] text-amber transition-colors hover:text-ink"
+                className="link-keyline font-mono text-[0.62rem] uppercase tracking-[0.18em] text-[var(--accent)] transition-colors hover:text-ink"
               >
                 {stops[stop.index].city} →
               </button>

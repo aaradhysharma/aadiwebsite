@@ -41,6 +41,9 @@ function AltimeterReadout({ progress }: { progress: MotionValue<number> }) {
     if (p < 0.7) return "SEA LEVEL";
     return "NEUTRAL BUOYANCY";
   });
+  // sky phases read amber (matches the SKYDIVE eyebrow), underwater phases read
+  // ocean cyan (matches SCUBA) — same color language as the hobby copy below.
+  const phaseColor = useTransform(progress, (p) => (p < 0.66 ? "var(--amber)" : "var(--ocean)"));
 
   return (
     <div className="absolute right-5 top-20 z-20 text-right sm:right-8 md:top-24">
@@ -49,7 +52,10 @@ function AltimeterReadout({ progress }: { progress: MotionValue<number> }) {
         <motion.span>{label}</motion.span>
         <span className="ml-1.5 text-sm text-muted md:text-base">FT</span>
       </p>
-      <motion.p className="mt-1 font-mono text-[0.56rem] uppercase tracking-[0.24em] text-amber">
+      <motion.p
+        style={{ color: phaseColor }}
+        className="mt-1 font-mono text-[0.56rem] uppercase tracking-[0.24em]"
+      >
         {phase}
       </motion.p>
     </div>
@@ -159,7 +165,7 @@ export default function AltitudeSection() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(180deg, #04060b 0%, #0a1526 58%, rgba(240,177,60,0.09) 100%)",
+                  "linear-gradient(180deg, #020306 0%, #0a1526 55%, #17335a 100%)",
               }}
             />
           </motion.div>
@@ -168,7 +174,7 @@ export default function AltitudeSection() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(180deg, #081020 0%, #0d1e33 55%, rgba(79,195,232,0.16) 100%)",
+                  "linear-gradient(180deg, #081020 0%, #0d1e33 52%, rgba(79,195,232,0.28) 100%)",
               }}
             />
           </motion.div>
@@ -251,7 +257,7 @@ export default function AltitudeSection() {
             className="absolute inset-x-0 top-1/2 z-10"
           >
             <div className="mx-auto max-w-5xl px-5 sm:px-8">
-              <div className="h-px w-full bg-ocean/50" />
+              <div className="h-px w-full bg-ocean/70" />
               <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-ocean">
                 {SEA_LINE}
               </p>

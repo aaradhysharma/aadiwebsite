@@ -265,7 +265,10 @@ export default function JourneySection() {
                   {veil.mode === "dive" ? (
                     <>
                       <p className="coord tracking-[0.3em]">{veil.stop.coords}</p>
-                      <p className="font-mono text-[0.68rem] uppercase tracking-[0.3em] text-amber">
+                      <p
+                        className="font-mono text-[0.68rem] uppercase tracking-[0.3em]"
+                        style={{ color: veil.stop.accent }}
+                      >
                         {veil.stop.city} — {veil.stop.org}
                       </p>
                     </>
@@ -287,8 +290,9 @@ export default function JourneySection() {
                     key={stop.id}
                     onClick={() => flyTo(stop.id)}
                     disabled={busy && !active}
+                    style={active ? { color: stop.accent } : undefined}
                     className={`link-keyline font-mono text-[0.62rem] uppercase tracking-[0.18em] transition-colors disabled:opacity-50 ${
-                      active ? "text-amber" : "text-muted hover:text-ink"
+                      active ? "" : "text-muted hover:text-ink"
                     }`}
                   >
                     {String(stop.index).padStart(2, "0")} {stop.city}

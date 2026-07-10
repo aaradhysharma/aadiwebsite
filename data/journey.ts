@@ -19,6 +19,11 @@ export type Stop = {
   dates: string;
   kind: "education" | "work";
   buildingStyle: BuildingStyle;
+  /** This stop's identity color — globe marker, street-level signage, panel accents.
+      Inspired by each employer's real brand color, tuned to read on a dark map. */
+  accent: string;
+  /** Same hue, low-alpha — hover fills / soft backgrounds. */
+  accentSoft: string;
   /** Real geographic position [latitude, longitude] in degrees — drives the globe */
   latLon: [number, number];
   /** Position of this stop's island on the 3D map plane [x, y, z] (legacy flat-map layout) */
@@ -44,6 +49,8 @@ export const stops: Stop[] = [
     dates: "2016 – 2020",
     kind: "education",
     buildingStyle: "college",
+    accent: "#e08a3c",
+    accentSoft: "rgba(224, 138, 60, 0.16)",
     latLon: [22.7196, 75.8577],
     position: [-12.5, 0, 3.5],
     chapter: "Where it starts",
@@ -66,6 +73,8 @@ export const stops: Stop[] = [
     dates: "2020 – 2022",
     kind: "education",
     buildingStyle: "campus",
+    accent: "#e0334f",
+    accentSoft: "rgba(224, 51, 79, 0.16)",
     latLon: [42.3398, -71.0892],
     position: [-7.5, 0, -3.5],
     chapter: "The Northeastern years",
@@ -90,6 +99,8 @@ export const stops: Stop[] = [
     dates: "Jun 2021 – Jan 2022",
     kind: "work",
     buildingStyle: "lab",
+    accent: "#2fa8d6",
+    accentSoft: "rgba(47, 168, 214, 0.16)",
     latLon: [42.3736, -71.1097],
     position: [-2.5, 0, 3],
     chapter: "First pharma lab",
@@ -113,6 +124,8 @@ export const stops: Stop[] = [
     dates: "Sep 2022 – Apr 2024",
     kind: "work",
     buildingStyle: "office",
+    accent: "#4caf6e",
+    accentSoft: "rgba(76, 175, 110, 0.16)",
     latLon: [35.7915, -78.7811],
     position: [2.5, 0, -3.5],
     chapter: "Scientific cloud at scale",
@@ -137,6 +150,8 @@ export const stops: Stop[] = [
     dates: "Apr 2024 – Sep 2025",
     kind: "work",
     buildingStyle: "skyline",
+    accent: "#4caf6e",
+    accentSoft: "rgba(76, 175, 110, 0.16)",
     latLon: [41.8781, -87.6298],
     position: [7.5, 0, 3],
     chapter: "Senior years, bigger clients",
@@ -166,6 +181,8 @@ export const stops: Stop[] = [
     dates: "Dec 2025 – present",
     kind: "work",
     buildingStyle: "chenmed",
+    accent: "#2fb5a8",
+    accentSoft: "rgba(47, 181, 168, 0.16)",
     latLon: [25.7617, -80.1918],
     position: [12.5, 0, -3],
     chapter: "Building 3 → Building 1",

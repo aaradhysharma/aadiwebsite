@@ -36,10 +36,15 @@ type MatBundle = {
   foliage: THREE.MeshStandardMaterial;
   pale: THREE.MeshStandardMaterial;
   beacon: THREE.MeshStandardMaterial;
-  teal: THREE.MeshStandardMaterial;
+  /** The stop's brand color — one signage/beacon element per kit, echoing the globe marker. */
+  accent: THREE.MeshStandardMaterial;
 };
 
-function useBuildingMaterials(active: boolean, reducedMotion: boolean): MatBundle {
+function useBuildingMaterials(
+  active: boolean,
+  reducedMotion: boolean,
+  accentColor: string
+): MatBundle {
   const bundle = useMemo<MatBundle>(
     () => ({
       body: new THREE.MeshStandardMaterial({
@@ -89,13 +94,13 @@ function useBuildingMaterials(active: boolean, reducedMotion: boolean): MatBundl
         emissive: "#ff5040",
         emissiveIntensity: 1.2,
       }),
-      teal: new THREE.MeshStandardMaterial({
-        color: "#0c2a27",
-        emissive: "#2fb5a8",
-        emissiveIntensity: 0.9,
+      accent: new THREE.MeshStandardMaterial({
+        color: new THREE.Color(accentColor).multiplyScalar(0.16),
+        emissive: accentColor,
+        emissiveIntensity: 1.0,
       }),
     }),
-    []
+    [accentColor]
   );
 
   useFrame((state, delta) => {
@@ -266,10 +271,11 @@ function CollegeKit({ mats }: { mats: MatBundle }) {
       <mesh position={[0, 1.58, 0]} material={mats.window}>
         <sphereGeometry args={[0.06, 8, 8]} />
       </mesh>
-      {/* campus gate — two pillars and a lintel */}
+      {/* campus gate — two pillars, a lintel, and a lit institute sign */}
       <Box mats={mats} mat="brick" position={[-0.45, 0.3, 1.55]} size={[0.14, 0.6, 0.14]} />
       <Box mats={mats} mat="brick" position={[0.45, 0.3, 1.55]} size={[0.14, 0.6, 0.14]} />
       <Box mats={mats} mat="pale" position={[0, 0.66, 1.55]} size={[1.15, 0.12, 0.18]} />
+      <Box mats={mats} mat="accent" position={[0, 0.86, 0.58]} size={[0.55, 0.08, 0.03]} />
       <Strip mats={mats} position={[0, 0.62, 0.57]} size={[1.4, 0.1, 0.03]} />
       <Strip mats={mats} position={[0, 0.34, 0.57]} size={[1.4, 0.1, 0.03]} />
       <Strip mats={mats} position={[-1.35, 0.36, 0.47]} size={[0.7, 0.09, 0.03]} />
@@ -305,6 +311,10 @@ function CampusKit({ mats }: { mats: MatBundle }) {
       <mesh position={[-1.05, 2.2, -0.85]} material={mats.pale}>
         <coneGeometry args={[0.24, 0.34, 4]} />
       </mesh>
+      {/* lit finial — school color, echoes the globe marker */}
+      <mesh position={[-1.05, 2.42, -0.85]} material={mats.accent}>
+        <sphereGeometry args={[0.032, 8, 8]} />
+      </mesh>
       {/* lit clock face */}
       <mesh position={[-1.05, 1.82, -0.68]} rotation={[Math.PI / 2, 0, 0]} material={mats.window}>
         <cylinderGeometry args={[0.075, 0.075, 0.02, 12]} />
@@ -338,6 +348,8 @@ function LabKit({ mats }: { mats: MatBundle }) {
       <Box mats={mats} position={[-0.4, 0.45, 0]} size={[2, 0.9, 1.3]} />
       <Box mats={mats} mat="glass" position={[0.95, 0.85, -0.15]} size={[0.9, 1.7, 0.9]} />
       <Box mats={mats} mat="glass" position={[-1.55, 0.35, -0.75]} size={[0.6, 0.7, 0.6]} />
+      {/* lit sign near the tower's crown — company color */}
+      <Box mats={mats} mat="accent" position={[0.95, 1.55, 0.3]} size={[0.55, 0.1, 0.03]} />
       {/* rooftop vents + pipe run */}
       <mesh position={[-0.85, 1.05, 0.25]} material={mats.pale}>
         <cylinderGeometry args={[0.14, 0.14, 0.3, 10]} />
@@ -376,8 +388,9 @@ function OfficeKit({ mats }: { mats: MatBundle }) {
       <Strip mats={mats} position={[0.15, 0.85, 0.62]} size={[0.12, 1.4, 0.03]} />
       <Strip mats={mats} position={[0.55, 0.85, 0.62]} size={[0.12, 1.4, 0.03]} />
       <Strip mats={mats} position={[-1.15, 0.4, 0.66]} size={[0.7, 0.1, 0.03]} />
-      {/* entrance canopy + lot lamps */}
+      {/* entrance canopy + lit company sign + lot lamps */}
       <Box mats={mats} mat="pale" position={[0.15, 0.12, 0.75]} size={[0.7, 0.08, 0.35]} />
+      <Box mats={mats} mat="accent" position={[0.15, 0.22, 0.94]} size={[0.48, 0.08, 0.03]} />
       <mesh position={[1.15, 0.3, 1.1]} material={mats.pale}>
         <cylinderGeometry args={[0.012, 0.012, 0.6, 5]} />
       </mesh>
@@ -403,6 +416,8 @@ function SkylineKit({ mats }: { mats: MatBundle }) {
       <Box mats={mats} position={[0.45, 0.7, 0.15]} size={[0.95, 1.4, 0.95]} />
       <Box mats={mats} position={[0.45, 1.85, 0.15]} size={[0.68, 0.9, 0.68]} />
       <Box mats={mats} position={[0.45, 2.7, 0.15]} size={[0.44, 0.8, 0.44]} />
+      {/* lit sign at street level — same employer as Cary, same color */}
+      <Box mats={mats} mat="accent" position={[0.45, 0.18, 0.65]} size={[0.42, 0.08, 0.03]} />
       {/* twin antenna masts + aircraft beacons */}
       <mesh position={[0.33, 3.45, 0.05]} material={mats.pale}>
         <cylinderGeometry args={[0.016, 0.016, 0.7, 6]} />
@@ -510,8 +525,8 @@ function ChenMedKit({ mats, reducedMotion }: { mats: MatBundle; reducedMotion: b
       <Strip mats={mats} position={[0.85, 1.28, 0.24]} size={[0.95, 0.1, 0.03]} />
       <Strip mats={mats} position={[0.85, 0.94, 0.24]} size={[0.95, 0.1, 0.03]} />
       <Strip mats={mats} position={[0.85, 0.6, 0.24]} size={[0.95, 0.1, 0.03]} />
-      {/* teal rooftop sign — ChenMed green */}
-      <mesh position={[0.85, 2.06, -0.3]} material={mats.teal}>
+      {/* rooftop sign — ChenMed teal */}
+      <mesh position={[0.85, 2.06, -0.3]} material={mats.accent}>
         <boxGeometry args={[0.8, 0.07, 0.07]} />
       </mesh>
 
@@ -616,7 +631,7 @@ function KitPopGroup({
 export default function StopIsland({ stop, reducedMotion }: StopIslandProps) {
   const [hovered, setHovered] = useState(false);
   useCursor(hovered);
-  const mats = useBuildingMaterials(hovered, reducedMotion);
+  const mats = useBuildingMaterials(hovered, reducedMotion, stop.accent);
   const Kit = KITS[stop.buildingStyle];
 
   return (
