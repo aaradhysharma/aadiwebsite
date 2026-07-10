@@ -237,10 +237,9 @@ function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps)
     }
   });
 
-  const isNewEnglandPair = stop.id === "boston" || stop.id === "cambridge";
-  // A shared cool atlas tone keeps the adjacent pair calm on the globe.
-  // Their full street scenes retain Northeastern red and Eisai blue.
-  const accent = isNewEnglandPair ? "#9fb6d8" : stop.accent;
+  // Keep the nearby pair physically separated while restoring each identity:
+  // Northeastern red and Eisai's primary blue.
+  const accent = stop.accent;
   const labelX = stop.id === "boston" ? -0.1 : stop.id === "cambridge" ? 0.1 : 0;
 
   return (

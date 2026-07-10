@@ -2,7 +2,7 @@ import { profile } from "@/data/profile";
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="relative">
+    <section className="relative">
       <div className="mx-auto max-w-7xl px-4 pb-10 pt-28 sm:px-6 md:pt-36 lg:px-10">
         {/* Toolbox band */}
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
@@ -38,7 +38,7 @@ export default function ContactSection() {
         </div>
 
         {/* Contact */}
-        <div className="mt-28 md:mt-36">
+        <div id="contact" className="mt-28 scroll-mt-20 md:mt-36">
           <p className="section-label">
             <span className="idx">04</span> / CONTACT
           </p>
