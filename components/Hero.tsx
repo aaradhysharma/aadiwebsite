@@ -171,6 +171,13 @@ export default function Hero() {
             TRACE THE JOURNEY ↓
           </a>
           <a
+            href={profile.links.resume}
+            download="Aaradhy-Sharma-Resume.docx"
+            className="border border-line px-5 py-3 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink-dim transition-colors duration-300 hover:border-amber/50 hover:text-amber"
+          >
+            DOWNLOAD RESUME ↓
+          </a>
+          <a
             href={profile.links.github}
             target="_blank"
             rel="noopener noreferrer"

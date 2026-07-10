@@ -167,6 +167,25 @@ type MarkerProps = {
   reducedMotion: boolean;
 };
 
+/** Boston and Cambridge are only a few kilometres apart. Give their globe
+    markers a tiny cartographic offset so both models remain clickable; dives
+    still use the real coordinates from `stop.latLon`. */
+function markerPositionFor(stop: Stop): THREE.Vector3 {
+  const base = latLonToVector3(stop.latLon[0], stop.latLon[1], R).normalize();
+  if (stop.id !== "boston" && stop.id !== "cambridge") {
+    return base.multiplyScalar(R * 1.006);
+  }
+
+  const tangent = new THREE.Vector3()
+    .crossVectors(new THREE.Vector3(0, 1, 0), base)
+    .normalize();
+  const direction = stop.id === "boston" ? -1 : 1;
+  return base
+    .addScaledVector(tangent, direction * 0.032)
+    .normalize()
+    .multiplyScalar(R * 1.006);
+}
+
 function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps) {
   const [hovered, setHovered] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
@@ -175,8 +194,8 @@ function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps)
   const worldPos = useMemo(() => new THREE.Vector3(), []);
 
   const position = useMemo(
-    () => latLonToVector3(stop.latLon[0], stop.latLon[1], R * 1.006),
-    [stop.latLon]
+    () => markerPositionFor(stop),
+    [stop]
   );
   const outward = useMemo(
     () =>
@@ -218,7 +237,11 @@ function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps)
     }
   });
 
-  const accent = stop.accent;
+  const isNewEnglandPair = stop.id === "boston" || stop.id === "cambridge";
+  // A shared cool atlas tone keeps the adjacent pair calm on the globe.
+  // Their full street scenes retain Northeastern red and Eisai blue.
+  const accent = isNewEnglandPair ? "#9fb6d8" : stop.accent;
+  const labelX = stop.id === "boston" ? -0.1 : stop.id === "cambridge" ? 0.1 : 0;
 
   return (
     <group ref={groupRef} position={position} quaternion={outward}>
@@ -250,7 +273,12 @@ function CityMarker({ stop, onSelect, interactive, reducedMotion }: MarkerProps)
         <sphereGeometry args={[0.055, 8, 8]} />
       </mesh>
       {/* label */}
-      <Html position={[0, 0.045, 0]} center zIndexRange={[10, 0]} style={{ pointerEvents: "none" }}>
+      <Html
+        position={[labelX, 0.045, 0]}
+        center
+        zIndexRange={[10, 0]}
+        style={{ pointerEvents: "none" }}
+      >
         <div
           ref={labelRef}
           style={{

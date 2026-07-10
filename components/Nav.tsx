@@ -51,12 +51,11 @@ export default function Nav() {
             </a>
           ))}
           <a
-            href={profile.links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link-keyline whitespace-nowrap text-ink-dim transition-colors hover:text-amber"
+            href={profile.links.resume}
+            download="Aaradhy-Sharma-Resume.docx"
+            className="whitespace-nowrap border border-amber/45 px-2.5 py-1.5 text-amber transition-colors hover:border-amber hover:bg-amber-soft sm:px-3"
           >
-            GITHUB ↗
+            RESUME ↓
           </a>
         </div>
       </nav>

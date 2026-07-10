@@ -6,6 +6,7 @@ export const profile = {
   links: {
     github: "https://github.com/aaradhysharma",
     linkedin: "https://www.linkedin.com/in/aaradhy-sharma-012400187",
+    resume: "/Aaradhy-Sharma-Resume.docx",
   },
   skills: [
     {

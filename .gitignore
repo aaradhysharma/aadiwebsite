@@ -19,5 +19,6 @@ next-env.d.ts
 
 # private source material — resumes contain personal info, never commit
 /source-materials/
+/Resume Aaradhy  Sr. Cloud Engineer (1).docx
 
 .vercel
