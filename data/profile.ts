@@ -1,12 +1,7 @@
 export const profile = {
-  name: "Aaradhy Sharma",
-  firstName: "Aaradhy",
-  title: "AI Engineer at ChenMed",
-  headline: "AI agents in production. Infrastructure that survives them.",
   subhead:
     "Six years from BI dashboards in Indore to production LangGraph agents in Miami — through Northeastern, big-pharma cloud infrastructure, and a lot of Terraform.",
   focus: ["AI Agent Development", "HPC", "RAG", "GitOps"],
-  location: "Miami, FL",
   email: "aaradhya14sharma@gmail.com",
   links: {
     github: "https://github.com/aaradhysharma",
@@ -66,19 +61,16 @@ export const profile = {
       school: "Northeastern University",
       degree: "MS, Information Systems",
       dates: "2020 – 2022",
-      note: "Grad TA for Data Science Engineering Methods · AI Skunkworks researcher",
     },
     {
       school: "Westcliff University",
       degree: "MBA, Artificial Intelligence",
       dates: "2025 – 2027 (in progress)",
-      note: "",
     },
     {
       school: "Indore Institute of Science & Technology",
       degree: "BE, Computer Science",
       dates: "2016 – 2020",
-      note: "",
     },
   ],
 };

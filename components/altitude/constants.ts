@@ -38,8 +38,8 @@ export const CLOSING = {
 /* Parallax cloud layers. Each layer is a 240vh strip of soft
    radial-gradient ellipses; `travel` is how far (vh) the strip
    slides upward across the freefall range. Bigger travel = nearer. */
-export type CloudBlob = { x: number; y: number; w: number; h: number; a: number };
-export type CloudLayerSpec = { travel: number; blobs: CloudBlob[] };
+type CloudBlob = { x: number; y: number; w: number; h: number; a: number };
+type CloudLayerSpec = { travel: number; blobs: CloudBlob[] };
 
 export const CLOUD_LAYERS: CloudLayerSpec[] = [
   {
@@ -79,7 +79,7 @@ export const CLOUD_LAYERS: CloudLayerSpec[] = [
 
 /* Speed streaks — thin vertical lines racing upward mid-freefall.
    left/start in %, len/travel in vh. */
-export type Streak = { left: number; start: number; len: number; travel: number; alpha: number };
+type Streak = { left: number; start: number; len: number; travel: number; alpha: number };
 
 export const STREAKS: Streak[] = [
   { left: 10, start: 40, len: 14, travel: 260, alpha: 0.16 },
@@ -94,7 +94,7 @@ export const STREAKS: Streak[] = [
 ];
 
 /* Underwater light rays — skewed translucent wedges from the surface. */
-export type Ray = { left: string; width: number; delay: number; duration: number };
+type Ray = { left: string; width: number; delay: number; duration: number };
 
 export const RAYS: Ray[] = [
   { left: "14%", width: 150, delay: 0, duration: 10 },
@@ -103,7 +103,7 @@ export const RAYS: Ray[] = [
 ];
 
 /* Rising bubbles — deterministic sizes/delays (hydration-safe). */
-export type Bubble = { left: number; size: number; delay: number; duration: number; drift: number };
+type Bubble = { left: number; size: number; delay: number; duration: number; drift: number };
 
 export const BUBBLES: Bubble[] = [
   { left: 6, size: 5, delay: 0.0, duration: 12, drift: 16 },

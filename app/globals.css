@@ -16,9 +16,7 @@
   --muted: #8b94ab;
   --amber: #f0b13c;
   --amber-soft: rgba(240, 177, 60, 0.16);
-  --amber-glow: rgba(240, 177, 60, 0.45);
   --ocean: #4fc3e8;
-  --ocean-deep: #071d33;
   --sky: #8fb8de;
 }
 
@@ -36,7 +34,6 @@
   --color-ocean: var(--ocean);
   --color-sky: var(--sky);
   --font-display: var(--font-fraunces), "Georgia", serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), "Consolas", monospace;
 }
 
