@@ -138,8 +138,10 @@ export const stops: Stop[] = [
     role: "Sr. Cloud Engineer",
     dates: "Apr 2024 – Sep 2025",
     buildingStyle: "skyline",
-    accent: "#4caf6e",
-    accentSoft: "rgba(76, 175, 110, 0.16)",
+    // AbbVie client work defined the Chicago chapter. Its official navy
+    // disappears into the night map, so use AbbVie green for visible identity.
+    accent: "#00a88e",
+    accentSoft: "rgba(0, 168, 142, 0.16)",
     latLon: [41.8781, -87.6298],
     chapter: "Senior years, bigger clients",
     summary:
