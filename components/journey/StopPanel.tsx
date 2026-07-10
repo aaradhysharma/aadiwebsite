@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { stops, type Stop } from "@/data/journey";
 import { byId } from "@/data/projects";
@@ -11,6 +12,14 @@ type StopPanelProps = {
 };
 
 export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps) {
+  // On phones the panel starts collapsed so the building stays visible;
+  // desktop (md+) always shows the full rail.
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [stop?.id]);
+
   return (
     <AnimatePresence mode="wait">
       {stop && (
@@ -22,26 +31,51 @@ export default function StopPanel({ stop, onNavigate, onClose }: StopPanelProps)
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="pointer-events-auto flex max-h-full w-full flex-col overflow-hidden border border-line bg-bg-panel/95 backdrop-blur-md md:w-[26rem]"
         >
-          {/* header */}
-          <div className="flex items-start justify-between gap-4 border-b border-line px-6 pb-4 pt-5">
-            <div>
+          {/* header — tap anywhere on it to expand/collapse on phones */}
+          <div
+            onClick={() => setExpanded((v) => !v)}
+            className="flex cursor-pointer items-start justify-between gap-4 border-b border-line px-5 pb-3.5 pt-4 md:cursor-default md:px-6 md:pb-4 md:pt-5"
+          >
+            <div className="min-w-0">
               <p className="font-mono text-[0.6rem] uppercase tracking-[0.24em] text-amber">
                 {String(stop.index).padStart(2, "0")} / {stop.city.toUpperCase()} —{" "}
                 {stop.region.toUpperCase()}
               </p>
               <p className="coord mt-1.5">{stop.coords}</p>
+              <p className="mt-1.5 truncate font-mono text-[0.6rem] uppercase tracking-[0.14em] text-ink-dim md:hidden">
+                {stop.org} — {stop.role}
+              </p>
             </div>
-            <button
-              onClick={onClose}
-              aria-label="Close panel"
-              className="font-mono text-sm text-muted transition-colors hover:text-ink"
-            >
-              ✕
-            </button>
+            <div className="flex shrink-0 items-center gap-3">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpanded((v) => !v);
+                }}
+                aria-expanded={expanded}
+                className="border border-line px-2.5 py-1.5 font-mono text-[0.58rem] uppercase tracking-[0.18em] text-ink-dim transition-colors hover:border-amber/50 hover:text-amber md:hidden"
+              >
+                {expanded ? "HIDE ▾" : "DETAILS ▴"}
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+                aria-label="Close panel"
+                className="font-mono text-sm text-muted transition-colors hover:text-ink"
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
-          {/* body */}
-          <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+          {/* body — hidden while collapsed on phones so the diorama stays visible */}
+          <div
+            className={`min-h-0 flex-1 overflow-y-auto px-5 py-4 md:block md:px-6 md:py-5 ${
+              expanded ? "block" : "hidden"
+            }`}
+          >
             <h3 className="font-display text-2xl leading-tight text-ink">{stop.chapter}</h3>
             <p className="mt-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-ink-dim">
               {stop.org} — {stop.role}

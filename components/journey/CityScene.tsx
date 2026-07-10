@@ -107,10 +107,12 @@ export default function CityScene({ stop, reducedMotion }: CitySceneProps) {
 
   return (
     <group>
-      {/* night lighting — cool moonlight + faint warm bounce */}
-      <ambientLight intensity={0.38} color="#8fb8de" />
-      <directionalLight position={[-14, 22, 10]} intensity={1.25} color="#b9cdea" />
-      <directionalLight position={[18, 8, -14]} intensity={0.45} color="#f0b13c" />
+      {/* night lighting — strong cool key + warm bounce + low rim, so each
+          box face catches a different level and edges read at a glance */}
+      <ambientLight intensity={0.26} color="#8fb8de" />
+      <directionalLight position={[-14, 22, 10]} intensity={1.85} color="#b9cdea" />
+      <directionalLight position={[18, 8, -14]} intensity={0.7} color="#f0b13c" />
+      <directionalLight position={[4, 3, 18]} intensity={0.35} color="#6f88ad" />
 
       <Stars radius={80} depth={30} count={1100} factor={2.4} saturation={0} fade speed={0.4} />
 

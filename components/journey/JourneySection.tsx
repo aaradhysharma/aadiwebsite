@@ -246,7 +246,7 @@ export default function JourneySection() {
 
             {/* stop panel — right rail on desktop, bottom sheet on mobile */}
             {view === "city" && (
-              <div className="pointer-events-none absolute inset-x-3 bottom-3 top-auto z-20 flex max-h-[72%] md:inset-y-4 md:left-auto md:right-4 md:max-h-none md:items-stretch">
+              <div className="pointer-events-none absolute inset-x-3 bottom-3 top-auto z-20 flex max-h-[58%] md:inset-y-4 md:left-auto md:right-4 md:max-h-none md:items-stretch">
                 <StopPanel stop={selected} onNavigate={flyTo} onClose={goOrbit} />
               </div>
             )}

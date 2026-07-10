@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useCursor, Html, Line } from "@react-three/drei";
 import type { Line2 } from "three-stdlib";
@@ -128,6 +128,10 @@ function Strip({
   );
 }
 
+/** Blueprint-style edge lines so every box face reads against the night bodies. */
+const EDGE_COLOR = "#9fb6d8";
+const EDGE_OPACITY = 0.32;
+
 function Box({
   mats,
   mat = "body",
@@ -141,10 +145,36 @@ function Box({
   size: [number, number, number];
   rotation?: [number, number, number];
 }) {
+  const [w, h, d] = size;
+  const geometry = useMemo(() => new THREE.BoxGeometry(w, h, d), [w, h, d]);
+  // skip outlines on paper-thin slabs (paths, parking stripes) — they'd read as clutter
+  const showEdges = Math.min(w, h, d) > 0.04;
+  const edgeGeometry = useMemo(
+    () => (showEdges ? new THREE.EdgesGeometry(geometry) : null),
+    [geometry, showEdges]
+  );
+
+  useEffect(() => {
+    return () => {
+      geometry.dispose();
+      edgeGeometry?.dispose();
+    };
+  }, [geometry, edgeGeometry]);
+
   return (
-    <mesh position={position} rotation={rotation} material={mats[mat]} castShadow>
-      <boxGeometry args={size} />
-    </mesh>
+    <group position={position} rotation={rotation}>
+      <mesh geometry={geometry} material={mats[mat]} castShadow />
+      {edgeGeometry && (
+        <lineSegments geometry={edgeGeometry}>
+          <lineBasicMaterial
+            color={EDGE_COLOR}
+            transparent
+            opacity={EDGE_OPACITY}
+            depthWrite={false}
+          />
+        </lineSegments>
+      )}
+    </group>
   );
 }
 
@@ -597,9 +627,10 @@ export default function StopIsland({ stop, reducedMotion }: StopIslandProps) {
       }}
       onPointerOut={() => setHovered(false)}
     >
-      {/* island plinth */}
-      <mesh position={[0, -0.3, 0]} material={mats.body}>
+      {/* island plinth — darker than the building bodies so kits stand off the ground */}
+      <mesh position={[0, -0.3, 0]}>
         <cylinderGeometry args={[2.7, 3.1, 0.6, 24]} />
+        <meshStandardMaterial color="#0e1726" roughness={0.95} metalness={0.05} flatShading />
       </mesh>
       {/* shore ring — faint cartographic contour */}
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
